@@ -9,11 +9,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.LinkedList;
 import java.util.List;
 
-import jdraw.framework.Figure;
-import jdraw.framework.FigureHandle;
-import jdraw.framework.FigureListener;
+import jdraw.framework.*;
+import jdraw.std.ConcreteListener;
+import jdraw.std.StdDrawModel;
 
 /**
  * Represents rectangles in JDraw.
@@ -21,11 +22,18 @@ import jdraw.framework.FigureListener;
  * @author Christoph Denzler
  *
  */
-public class Rect implements Figure {
+
+
+public final class Rect implements Figure{
 	/**
 	 * Use the java.awt.Rectangle in order to save/reuse code.
 	 */
 	private final Rectangle rectangle;
+	public LinkedList<ConcreteListener> listeners = new LinkedList<ConcreteListener>();
+	
+	public StdDrawModel model;
+	
+	
 	
 	/**
 	 * Create a new rectangle of the given dimension.
@@ -36,7 +44,11 @@ public class Rect implements Figure {
 	 */
 	public Rect(int x, int y, int w, int h) {
 		rectangle = new Rectangle(x, y, w, h);
+		//model = new DrawModelEvent.DrawModel()
+		//model.addFigure();
+		
 	}
+	
 
 	/**
 	 * Draw the rectangle to the given graphics context.
@@ -48,18 +60,31 @@ public class Rect implements Figure {
 		g.fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 		g.setColor(Color.BLACK);
 		g.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+		
 	}
 	
 	@Override
 	public void setBounds(Point origin, Point corner) {
 		rectangle.setFrameFromDiagonal(origin, corner);
-		// TODO notification of change
+		//DrawModelEvent e = new DrawModelEvent(this.model, this, DrawModelEvent.Type.FIGURE_CHANGED);
+		FigureEvent fe = new FigureEvent(this); 
+		for (ConcreteListener i : listeners) {
+			i.figureChanged(fe);
+		}
+	
 	}
 
 	@Override
 	public void move(int dx, int dy) {
-		rectangle.setLocation(rectangle.x + dx, rectangle.y + dy);
-		// TODO notification of change
+		rectangle.setLocation(rectangle.x + dx, rectangle.y + dy);		
+		//DrawModelEvent e = new DrawModelEvent(this.model, this, DrawModelEvent.Type.FIGURE_CHANGED);
+		if (dx!=0 && dy!=0) {
+			FigureEvent fe = new FigureEvent(this); // TODO notification of change
+			for (ConcreteListener i : listeners) {
+			i.figureChanged(fe);
+			}
+			
+		}
 	}
 
 	@Override
@@ -82,19 +107,41 @@ public class Rect implements Figure {
 		return null;
 	}
 
-	@Override
-	public void addFigureListener(FigureListener listener) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void removeFigureListener(FigureListener listener) {
-		// TODO Auto-generated method stub
-	}
 
 	@Override
 	public Figure clone() {
 		return null;
 	}
+	
+	public void addFigureListener(ConcreteListener listener) {
+		listeners.add(listener);
+		
+		
+	}
 
+	public void removeFigureListener(ConcreteListener listener) {
+		listeners.remove(listener);		
+	}
+	
+	public void getModel(StdDrawModel sourcemodel) {
+		StdDrawModel model =  sourcemodel;
+	}
+
+
+	@Override
+	public void addFigureListener(FigureListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void removeFigureListener(FigureListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+		
+	
 }
