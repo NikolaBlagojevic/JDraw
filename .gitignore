@@ -1,0 +1,3 @@
+# MR eclude bin and build directories from git
+bin
+build
