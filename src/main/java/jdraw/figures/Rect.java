@@ -29,6 +29,7 @@ public final class Rect implements Figure{
 	 * Use the java.awt.Rectangle in order to save/reuse code.
 	 */
 	private final Rectangle rectangle;
+        // MR use the FigureListener class here instead of your Concrete one
 	public LinkedList<ConcreteListener> listeners = new LinkedList<ConcreteListener>();
 	
 	public StdDrawModel model;
@@ -78,6 +79,8 @@ public final class Rect implements Figure{
 	public void move(int dx, int dy) {
 		rectangle.setLocation(rectangle.x + dx, rectangle.y + dy);		
 		//DrawModelEvent e = new DrawModelEvent(this.model, this, DrawModelEvent.Type.FIGURE_CHANGED);
+                // MR the logic AND below should be an OR
+                // otherwise it is not possible to only move the figure vertically or horizontally
 		if (dx!=0 && dy!=0) {
 			FigureEvent fe = new FigureEvent(this); // TODO notification of change
 			for (ConcreteListener i : listeners) {

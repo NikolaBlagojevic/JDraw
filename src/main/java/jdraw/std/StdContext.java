@@ -15,6 +15,8 @@ import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+// MR in Java it is better to avoid wildcard imports.
+// instead, you should list all classes to be imported explicitly
 import jdraw.figures.*;
 import jdraw.framework.DrawCommandHandler;
 import jdraw.framework.DrawModel;

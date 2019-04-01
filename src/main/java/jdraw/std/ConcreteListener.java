@@ -6,6 +6,11 @@ import jdraw.framework.*;
 import jdraw.std.StdDrawModel;
 
 
+// MR this class should not be necessary
+// any class that will implement the FigureListener interface will do so
+// directly, instead of extending this class
+// Note: In Java one can only extend from a single class but may implement
+// several interfaces. This is a very important difference to be aware of.
 
 //FigureListener implementation
 		public class ConcreteListener implements FigureListener {
